@@ -120,7 +120,7 @@ if __name__ == "__main__":
     adjs[args.time_steps-1] = nx.adjacency_matrix(new_G)
 
     # build dataloader and model
-    device = torch.device("cuda:0")
+    device = torch.device("cpu")
     dataset = MyDataset(args, graphs, feats, adjs, context_pairs_train)
     dataloader = DataLoader(dataset, 
                             batch_size=args.batch_size, 
@@ -172,20 +172,20 @@ if __name__ == "__main__":
                                                                 epoch_auc_val, 
                                                                 epoch_auc_test))
     # Test Best Model
-    model.load_state_dict(torch.load("./model_checkpoints/model.pt"))
-    model.eval()
-    emb = model(feed_dict["graphs"])[:, -2, :].detach().cpu().numpy()
-    val_results, test_results, _, _ = evaluate_classifier(train_edges_pos,
-                                                        train_edges_neg,
-                                                        val_edges_pos, 
-                                                        val_edges_neg, 
-                                                        test_edges_pos,
-                                                        test_edges_neg, 
-                                                        emb, 
-                                                        emb)
-    auc_val = val_results["HAD"][1]
-    auc_test = test_results["HAD"][1]
-    print("Best Test AUC = {:.3f}".format(auc_test))
+#     model.load_state_dict(torch.load("./model_checkpoints/model.pt"))
+#     model.eval()
+#     emb = model(feed_dict["graphs"])[:, -2, :].detach().cpu().numpy()
+#     val_results, test_results, _, _ = evaluate_classifier(train_edges_pos,
+#                                                         train_edges_neg,
+#                                                         val_edges_pos, 
+#                                                         val_edges_neg, 
+#                                                         test_edges_pos,
+#                                                         test_edges_neg, 
+#                                                         emb, 
+#                                                         emb)
+#     auc_val = val_results["HAD"][1]
+#     auc_test = test_results["HAD"][1]
+#     print("Best Test AUC = {:.3f}".format(auc_test))
 
 
                 
